@@ -1,5 +1,9 @@
 # Behavioral Cloning
 
+[Low Res Video of Car Self Driving Around the Track](https://www.youtube.com/watch?v=KUvZUn31UsY)
+
+
+
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
 * Build, a convolution neural network in Keras that predicts steering angles from images
@@ -12,7 +16,6 @@ My project includes the following files:
 * clone.py contains the script to create and train the model
 * model.h5 contains the trained convolution neural network from clone.py
 * drive.py is for driving the car in autonomous mode (Provided by Udacity)
-
 
 ### Model Architecture and Training Strategy
 

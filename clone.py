@@ -24,10 +24,15 @@ train_data, validation_data = train_test_split(data, test_size=0.2)
 
 def generator(data, batch_size=36):
     data_len = len(data)
+
+    # Wheel angle correction of center / left / right images.
+    # This allows us to use the left and right cameras on the car
     correction = [0,0.3,-0.3]
     path = "../data/IMG/"
     while 1: # Loop forever so the generator never terminates
         sklearn.utils.shuffle(data)
+        # batch_size/6 because for each row we add 6 images
+        # center , left , right, reverse center, reverse left, reverse right
         for offset in range(0, data_len, int(batch_size/6)):
             batch_lines = data[offset:offset+int(batch_size/6)]
             images = []
@@ -35,17 +40,23 @@ def generator(data, batch_size=36):
 
             for batch_line in batch_lines:
             	angle = batch_line[3]
+                #loop over center / left / right images
             	for i in range(3):
+                    #gets filename from abritrary path
 	                new_path = path + batch_line[i].split('/')[-1]
+
+                    #Load image as BGR
 	                img = cv2.imread(new_path)
 	                corrected_angle = float(angle) + correction[i]
+
+                    #Add Default image + angle
 	                images.append(img)
 	                angles.append(corrected_angle)
 
+                    #Add Flipped image + reverse angle
 	                images.append(cv2.flip(img,1))
 	                angles.append(-corrected_angle)
 
-            # trim image to only see section with road
             X_train = np.array(images)
             y_train = np.array(angles)
             yield sklearn.utils.shuffle(X_train, y_train)

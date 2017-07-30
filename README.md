@@ -1,6 +1,10 @@
 # Behavioral Cloning
 
 [Low Res Video of Car Self Driving Around the Track](https://www.youtube.com/watch?v=KUvZUn31UsY)
+[//]: # (Image References)
+
+[image1]: readme_images/ackermann.png "Ackermann"
+[image2]: readme_images/nvidia.png "Nvidia"
 
 
 
@@ -36,8 +40,10 @@ I replicated the Model Nvidia used in their End to End self driving car.
 | Fully Connected 		| outputs 10														|
 | Fully Connected 		| outputs 1															|
 
+!["Nvidia Model"][image2]
 
-I used an adam optimizer and mse cost function.
+
+I used adam as the optimizer and mse as the cost function.
 
 Twenty percent of the data was used as validation, and while the validation data of the network is low, and the car can autonomously drive around the track, it doesn't mean too much. The number one rule is that you aren't allowed to let your model see your validation and test data. The model saw a very close approximate of it's validation data in the training data, this is because the data was captured from a video file, and frames between a video are often very similar. The model also saw the test data (the requirement to drive autonomously around a track), because the track that the training data was gathered from the same track it was tested from.
 
@@ -47,8 +53,18 @@ Dropout and L2 regression wasn't needed, although I did have to reduce the numbe
 
 ### Training Data
 
-The Data used to train the model came from me manually driving the car around the track four times, while Udacity's software recorded my input. When I stopped the recording, my actions would be replayed from the start and images would be captured along the way. The training data focused on keeping the car in the middle of the road to give it the best chance of success. This posed a minor problem. Because I, fairly accurately, drove in the middle of the road along the track, the model was given little data on how to recover if the car drifts to the side of the road. This was solved by the recording software giving me a left, center, and right camera on the car. Using the left and right images along with a correction value for the steering I was able to simulate me driving without having to spend much time collecting data. 
+The Data used to train the model came from me manually driving the car around the track four times, while Udacity's software recorded my input. When I stopped the recording, my actions would be replayed from the start and images would be captured along the way. The training data focused on keeping the car in the middle of the road to give it the best chance of success. This posed a minor problem. Because I, fairly accurately, drove in the middle of the road along the track, the model was given little data on how to recover if the car drifts to the side of the road. This was solved by the recording software giving me a left, center, and right camera on the car. Using the left and right images along with a correction value for the steering I was able to simulate me driving without having to spend much time collecting data.
 
+When using the images from the left / right cameras, I used a static correction of +/- .3 (which translates to 7.5 degrees). I believe that this caused my car to have a very wavy path. When driving around a corner the car preformed as expected, but when driving on a straight road the car would over correct and almost swerve left and right. I believe this is because the correction of 7.5 degrees was too much for the straight paths. Although, when I reduced the static correction, the car would under steer on curves and drive off the road. 
+
+The obvious solution is to make the left / right correction dynamic, and to do that one would need to calculate the circle the center camera is traveling in, and then calculate a circle for the left / right camera such that it intersects with the center circle at certain distance. The circle of the center camera depends on too many real world factors to calculate such as, wind speed, road traction, front/back weight balance, etc...
+
+That said a basic calculation of the center camera circle can be done by extending a line perpendicular from the inside wheel's lines and using where they connect as the center of the circle.
+
+!['Ackermann Exmaple'][image1]
+*Note the front outside wheel would only intersect with the inside of the circle if the car is using Ackermann steering.
+
+Once the center camera circle has been calculated, one could shift a new the circle to the left or right equal to the distance between the center and outside cameras, calculate the radius increase / decrease required to intersect with the center line at a distance x, and then calculate the new required angle of the steering. This method would require knowing the distance between the center and outside cameras, and the distance between the front axle and rear axle. Neither of these were provided from the simulation but it would be trivial to get these from a physical car. 
 
 ### Solution Design Approach
 

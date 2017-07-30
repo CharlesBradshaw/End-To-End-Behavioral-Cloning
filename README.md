@@ -1,6 +1,7 @@
 # Behavioral Cloning
 
 [Low Res Video of Car Self Driving Around the Track](https://www.youtube.com/watch?v=KUvZUn31UsY)
+
 [//]: # (Image References)
 
 [image1]: readme_images/ackermann.png "Ackermann"

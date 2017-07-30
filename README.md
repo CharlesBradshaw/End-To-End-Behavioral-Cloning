@@ -64,7 +64,7 @@ That said a basic calculation of the center camera circle can be done by extendi
 !['Ackermann Exmaple'][image1]
 *Note the front outside wheel would only intersect with the inside of the circle if the car is using Ackermann steering.
 
-Once the center camera circle has been calculated, one could shift a new the circle to the left or right equal to the distance between the center and outside cameras, calculate the radius increase / decrease required to intersect with the center line at a distance x, and then calculate the new required angle of the steering. This method would require knowing the distance between the center and outside cameras, and the distance between the front axle and rear axle. Neither of these were provided from the simulation but it would be trivial to get these from a physical car. 
+Once the center camera circle has been calculated, one could shift a new circle to the left / right equal to the distance between the center and outside cameras, then calculate the radius increase / decrease required to intersect with the center line at a distance x, and then calculate the new required angle of the steering wheel to follow that line. This method would require knowing the distance between the center and outside cameras, and the distance between the front axle and rear axle. Neither of these were provided from the simulation but it would be trivial to get these from a physical car. 
 
 ### Solution Design Approach
 
